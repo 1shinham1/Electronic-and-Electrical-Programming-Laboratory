@@ -132,15 +132,16 @@ class TranscriptBook(object):
 #Lab 3-2 add_transcipt() 만들기
 	def add_transcript(self, student_id, transcript, grade = 1, class_num = 1):
 		if (self.transcript_num < 30):
-			self.transcript_dict[student_id] = [transcript, grade, class_num]
-			self.transcript_num += 1
+			if isinstance(transcript, Transcript): #transcipt가 Transcript의 형식인지 확인하는 함수 
+				self.transcript_dict[student_id] = {"transcript" : transcript, "grade" :  grade, "class_num" : class_num}
+				self.transcript_num += 1
 		else:
 			print("30명 넘었슈")
 
 #Lab 3-2 reverse_transcript() 만들기
 	def reverse_transcipt(self, student_id, korean, english, math):
 		if (student_id in self.transcript_dict.keys()):
-			self.transcript_dict[student_id][0].write(korean, english, math)
+			self.transcript_dict[student_id]["transcript"].write(korean, english, math)
 		else:
 			print("student id : %d does not exist" %student_id)
 
@@ -148,6 +149,7 @@ class TranscriptBook(object):
 	def delete_transcript(self,student_id):
 		if (student_id in self.transcript_dict.keys()):
 			self.transcript_dict.pop(student_id) #안에 transcript따로 지워줘야하는가?
+			self.transcript_num -= 1
 			print("Transcript of student id %d is deleted" % student_id)
 		else:
 			print("student id : %d does not exist." %student_id)
@@ -156,9 +158,9 @@ class TranscriptBook(object):
 	def get_transcript(self, student_id):
 		if (student_id in self.transcript_dict.keys()):
 			print("student_id : %d" %student_id)
-			print("grade : %d" %self.transcript_dict[student_id][1])
-			print("classnum : %d" %self.transcript_dict[student_id][2])
-			print("score : " + str(self.transcript_dict[student_id][0]))
+			print("grade : %d" %self.transcript_dict[student_id]["grade"])
+			print("classnum : %d" %self.transcript_dict[student_id]["class_num"])
+			print("score : " + str(self.transcript_dict[student_id]["transcript"]))
 		else:
 			print("student_id %d does not exist" %student_id)
 
@@ -228,7 +230,7 @@ class YearMonth:
 
 #Lab 3-3 is_leap_year() 만들기
 	def is_leap_year(self, year):
-		return (year % 4 == 0)
+		return ((year % 4 == 0 and year % 100 != 0) or year % 400 == 0)
 
 #Lab 3-3 day_of_week() 만들기
 	def day_of_week(self, year, month, day):
